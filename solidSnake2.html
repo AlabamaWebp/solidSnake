@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>solidSnake</title>
+
+  <script>
+    let field = [];
+    let settings = false;
+    let x = 47;
+    let y = 20;
+    let game_started = false;
+    let target = createRandPos();
+    let game_snake = [];
+    let norm_game_speed = 300;
+    let game_speed = 300;
+    let speed_up = 6;
+    let game_interval;
+    let napravlenie = 1;
+    let tmp_napravlenie = napravlenie;
+    let bals = 0;
+    let max_bals = 0;
+    let cell_size = 36;
+
+    let espeed;
+    let estep;
+    let esize;
+
+    let ecur;
+    let emax;
+    let enx;
+    let eny;
+
+    let ego;
+    let epause;
+    let estop;
+    let esettings;
+    let eraschet;
+
+    let esave;
+    let eload;
+
+    function setButtonsGo() {
+      game_started = true;
+      ego.classList.add('disabled');
+      esettings.classList.add('disabled');
+      eraschet.classList.add('disabled');
+      enx.classList.add('disabled');
+      eny.classList.add('disabled');
+      
+      epause.classList.remove('disabled');
+      estop.classList.remove('disabled')
+    }
+
+    function setButtonsStop() {
+      game_started = false;
+      estop.classList.add('disabled')
+      epause.classList.add('disabled');
+
+      ego.classList.remove('disabled');
+      esettings.classList.remove('disabled');
+      eraschet.classList.remove('disabled');
+      enx.classList.remove('disabled');
+      eny.classList.remove('disabled');
+    }
+
+    function setVars() {
+      espeed = document.getElementById('speed');
+      estep = document.getElementById('step');
+      esize = document.getElementById('size');
+
+      ecur = document.getElementById('cur');
+      emax = document.getElementById('max');
+      enx = document.getElementById('nx');
+      eny = document.getElementById('ny');
+
+      ego = document.getElementById('go');
+      epause = document.getElementById('pause');
+      estop = document.getElementById('stop');
+      esettings = document.getElementById('settings');
+      eraschet = document.getElementById('raschet');
+
+      esave = document.getElementById('save');
+      eload = document.getElementById('load');
+      if (localStorage.getItem("save")) {
+        eload.classList.remove('disabled');
+      }
+    }
+    function saveSnake() {
+      // x, y, zmeya, apple, cur_game_speed, bals
+      const apple = `${target.x},${target.y}`
+      let snake = "";
+      for (let i = 0; i < game_snake.length; i++) {
+        console.log(`${game_snake[i].x},${game_snake[i].y}/`, i);
+        snake += `${game_snake[i].x},${game_snake[i].y}/`
+      }
+      snake = snake.slice(0, snake.length-1);
+      console.log(snake);
+      const save = `${x};${y};${snake};${apple};${game_speed};${bals}`
+      localStorage.setItem("save", save)
+    }
+    function loadSnake() {
+      const data = localStorage.getItem("save");
+      if (data) {
+        let m = data.split(';');
+        x = Number(m[0]);
+        y = Number(m[1]);
+        const snake = m[2].split('/');
+        game_snake = []
+        for (let i = 0; i < snake.length; i++) {
+          const tmp_snake = snake[i].split(',');
+          game_snake.push({
+            x: Number(tmp_snake[0]),
+            y: Number(tmp_snake[1]),
+          });
+        }
+        const tmp_t = m[3].split(',');
+        target = {x: Number(tmp_t[0]), y: Number(tmp_t[1])};
+        bals = Number(m[4]);
+      }
+      textX(x);
+      textY(y);
+      changeFieldSize();
+      setButtonsGo();
+      refreshSnakeColors();
+      pauseSnake();
+      eload.classList.add('disabled');
+    }   
+
+    initLocalStorage();
+    setTimeout(() => {
+      setVars();
+      setEls()
+      raschet();
+    }, 10);
+
+    function textSpeed(text) {
+      espeed.value = text;
+    }
+    function textStep(text) {
+      estep.value = text;
+    }
+    function textSize(text) {
+      esize.value = text+4;
+    }
+    function textX(text) {
+      enx.value = text;
+    }
+    function textY(text) {
+      eny.value = text;
+    }
+    function textCur(text) {
+      ecur.innerText = "Current: " + text;
+    }
+    function textMax(text) {
+      emax.innerText = "Max: " + text;
+    }
+
+
+    function changeFieldSize() {
+      field = []
+      for (let i = 0; i < y; i++) {
+        let tmp = []
+        for (let j = 0; j < x; j++) {
+          tmp.push({ colId: j, fill: '' })
+        }
+        field.push({ rowId: i, cols: tmp })
+      }
+      fillTable();
+    }
+    function raschet() {
+      const el = document.getElementById('game_container');
+      x = Math.floor(el.clientWidth / (cell_size + 5 + 4));
+      y = Math.floor((el.clientHeight / (cell_size + 5 + 4)));
+      textX(x);
+      textY(y);
+      changeFieldSize();
+    }
+
+    function fillTable() {
+      const table = document.getElementById('table');
+      while (table.children.length != 0) {
+        table.removeChild(table.children[0]);
+      }
+      for (let i = 0; i < y; i++) {
+        let row = document.createElement('tr');
+        for (let j = 0; j < x; j++) {
+          let col = document.createElement('td');
+          col.className = `td y${i}! x${j}`;
+          col.style.width = cell_size + "px";
+          col.style.height = cell_size + "px";
+          row.appendChild(col);
+        }
+        table.appendChild(row);
+      }
+    }
+
+    function getCenter() {
+      return [{
+        x: (x - x % 2) / 2,
+        y: (y - y % 2) / 2
+      },
+      {
+        x: (x - x % 2) / 2 + 1,
+        y: (y - y % 2) / 2
+      },
+      ]
+    }
+    function colorChange(x, y, color = "") {
+      const elMass = document.getElementsByClassName("x" + x);
+      for (let i = 0; i < elMass.length; i++) {
+        if (elMass[i].className.includes("y" + y + "! ")) {
+          elMass[i].style.backgroundColor = color;
+        }
+      }
+    }
+    function stopSnake() {
+      clearInterval(game_interval);
+      changeFieldSize();
+      setButtonsStop();
+      napravlenie = 1;
+      game_speed = norm_game_speed;
+      if (max_bals < bals) {
+        max_bals = bals;
+        localStorage.setItem("snake_max", max_bals + "");
+        textMax(max_bals)
+      }
+      bals = 0;
+    }
+    function refreshInterval() {
+      clearInterval(game_interval);
+      game_interval = setInterval(() => {
+        gameTick();
+      }, game_speed);
+    }
+    let is_pause = false;
+    function pauseSnake() {
+      is_pause = !is_pause;
+      if (is_pause) {
+        clearInterval(game_interval);
+        esave.classList.remove('disabled');
+        eload.classList.remove('disabled');
+        epause.innerText = "Вознобить";
+      }
+      else {
+        esave.classList.add('disabled');
+        eload.classList.add('disabled');
+        game_interval = setInterval(() => {
+        gameTick();
+        epause.innerText = "Пауза";
+      }, game_speed);
+      }
+    }
+    function startSnake() {
+      settings = false;
+      norm_game_speed = game_speed;
+      const coord = getCenter();
+      colorChange(coord[0].x, coord[0].y, "green");
+      colorChange(coord[1].x, coord[1].y, "green");
+      game_snake = coord;
+      game_interval = setInterval(() => {
+        gameTick();
+      }, game_speed);
+      createTarget();
+      setButtonsGo();
+    }
+    function getRand(max) {
+      return Math.floor(Math.random() * max);
+    }
+    function createRandPos() {
+      return {
+        x: getRand(x),
+        y: getRand(y)
+      }
+    }
+    function createTarget() {
+      let t = createRandPos();
+      for (let i = 0; i < game_snake.length; i++) {
+        if (game_snake[i].x == t.x && game_snake[i].y == t.y) {
+          t = createRandPos();
+          i = 0;
+        }
+      }
+      game_speed -= speed_up;
+      refreshInterval();
+      target = t;
+      ++bals;
+      textCur(bals)
+    }
+    function gameTick() {
+      createNewSnake();
+    }
+    function createNewSnake() {
+      napravlenie = tmp_napravlenie;
+      switch (napravlenie) {
+        case 0:
+          game_snake.unshift({ x: game_snake[0].x, y: game_snake[0].y - 1 });
+          break;
+        case 1:
+          game_snake.unshift({ x: game_snake[0].x + 1, y: game_snake[0].y });
+          break;
+        case 2:
+          game_snake.unshift({ x: game_snake[0].x, y: game_snake[0].y + 1 });
+          break;
+        case 3:
+          game_snake.unshift({ x: game_snake[0].x - 1, y: game_snake[0].y });
+          break;
+      }
+      if (game_snake[0].x == target.x && game_snake[0].y == target.y) {
+        createTarget();
+      }
+      else {
+        game_snake.pop();
+      }
+      for (let i = 0; i < game_snake.length; i++) {
+        if (game_snake[0].x > x
+          || game_snake[0].x < 0
+          || game_snake[0].y > y
+          || game_snake[0].y < 0
+          || (game_snake[0].x == game_snake[i == 0 ? 1 : i].x && game_snake[0].y == game_snake[i == 0 ? 1 : i].y)
+        ) {
+          stopSnake();
+          alert("Вы проиграли");
+          return;
+        }
+      }
+      refreshSnakeColors();
+      return;
+    }
+    function refreshSnakeColors() {
+      clearField();
+      colorChange(target.x, target.y, "red");
+      for (let i = 0; i < game_snake.length; i++) {
+        colorChange(game_snake[i].x, game_snake[i].y, "green");
+      }
+    }
+    function clearField() {
+      for (let i = 0; i < x; i++) {
+        for (let j = 0; j < y; j++) {
+          colorChange(i, j);
+        }
+      }
+    }
+    window.addEventListener("keyup", changeNapravlenie);
+    function changeNapravlenie(ev) {
+      switch (ev.key) {
+        case 'Enter':
+          if (!game_started) {
+            startSnake();
+          }
+          return;
+        case 'w':
+          napravlenie != 2 ? tmp_napravlenie = 0 : 0;
+          return;
+        case 'd':
+          napravlenie != 3 ? tmp_napravlenie = 1 : 0;
+          return;
+        case 's':
+          napravlenie != 0 ? tmp_napravlenie = 2 : 0;
+          return;
+        case 'a':
+          napravlenie != 1 ? tmp_napravlenie = 3 : 0;
+          return;
+        case 'ArrowUp':
+          napravlenie != 2 ? tmp_napravlenie = 0 : 0;
+          return;
+        case 'ArrowRight':
+          napravlenie != 3 ? tmp_napravlenie = 1 : 0;
+          return;
+        case 'ArrowDown':
+          napravlenie != 0 ? tmp_napravlenie = 2 : 0;
+          return;
+        case 'ArrowLeft':
+          napravlenie != 1 ? tmp_napravlenie = 3 : 0;
+          return;
+      }
+    }
+    function return_settings() {
+      norm_game_speed = 300;
+      game_speed = 300;
+      speed_up = 10;
+      cell_size = 36
+      textSize(cell_size);
+      textSpeed(game_speed);
+      textStep(speed_up);
+    }
+    function setCellSize(n) {
+      cell_size = n.valueAsNumber - 4;
+      raschet();
+      localStorage.setItem("cell_size_s", cell_size + "")
+    }
+    function setGameSpeed(n) {
+      game_speed = n;
+      localStorage.setItem("game_speed_s", n + "")
+    }
+    function setSpeedUp(n) {
+      speed_up = n;
+      localStorage.setItem("speed_up_s", n + "")
+    }
+    function initLocalStorage() {
+      if (localStorage.getItem("snake_max")) {
+        max_bals = Number(localStorage.getItem("snake_max"));
+      }
+      if (localStorage.getItem("cell_size_s")) {
+        cell_size = Number(localStorage.getItem("cell_size_s"));
+      }
+      if (localStorage.getItem("speed_up_s")) {
+        speed_up = Number(localStorage.getItem("speed_up_s"));
+      }
+      if (localStorage.getItem("game_speed_s")) {
+        game_speed = Number(localStorage.getItem("game_speed_s"));
+      }
+    }
+    function setEls() {
+      textStep(speed_up);
+      textMax(max_bals);
+      textSpeed(game_speed);
+      textSize(cell_size);
+    }
+    function changeX(e) {
+      x = e.valueAsNumber;
+      changeFieldSize();
+    }
+    function changeY(e) {
+      y = e.valueAsNumber;
+      changeFieldSize();
+    }
+    function changSpeedUp(e) {
+      speed_up = e.valueAsNumber;
+      localStorage.setItem("speed_up_s", speed_up);
+    }
+    function changGameSpeed(e) {
+      game_speed = e.valueAsNumber;
+      localStorage.setItem("game_speed_s", game_speed);
+    }
+  </script>
+  <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+  <style>
+
+    .button2 {
+      z-index: 1;
+      user-select: none;
+      height: 40px;
+      background-color: #6768ab;
+      transition: 1s ease;
+      border: 1px solid #6768ab !important;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: .2s;
+      padding: 0 10px;
+      display: flex !important;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      margin: 0 0 0 5px;
+    }
+    .button2:not(.disabled, .disabled2):hover, .button3:not(.disabled, .disabled2):hover { 
+      transform: scale(1.03);
+    }
+    .button2:not(.disabled, .disabled2):active, .button3:not(.disabled, .disabled2):active { 
+      transform: scale(0.97);
+    }
+
+    .button2[disabled=""] {
+      background-color: unset;
+      color: gray !important;
+      border-color: gray !important;
+      opacity: .5;
+      cursor: default !important;
+    }
+
+    .button3 {
+      z-index: 1;
+      user-select: none;
+      height: 40px;
+      background-color: #6768ab;
+      transition: 1s ease;
+      border: 1px solid #6768ab !important;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: .2s;
+      padding: 0 10px;
+      display: flex !important;
+      justify-content: center;
+      align-items: center;
+      color: white;
+
+    }
+
+    .button3[disabled=""] {
+      background-color: unset;
+      color: gray !important;
+      border-color: gray !important;
+      opacity: .5;
+      cursor: default !important;
+    }
+
+    .wg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .wgc {
+      box-sizing: border-box;
+      padding: 5px;
+      width: 100%;
+      height: 100%;
+    }
+
+    .wgcc {
+      box-sizing: border-box;
+      padding: 10px;
+      box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+      /* background-color: #eaeaea; */
+      background-color: rgb(56, 56, 56); 
+      border-radius: 5px;
+      width: 100%;
+      height: 100%;
+    }
+
+    .wgcc {
+      padding: 5px !important;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top_line {
+      box-sizing: border-box;
+      padding: 0 15px 0 20px;
+      margin: 10px 0 15px;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .top_line {
+      margin: 0;
+      padding: 0;
+      border-radius: 5px;
+      align-items: center;
+    }
+
+    .r {
+      display: flex;
+      align-items: center;
+    }
+
+    .r>* {
+      margin: 0 2px;
+    }
+
+    .game_container {
+      position: relative;
+      overflow: hidden;
+      border: 1px double #7a7a7a;
+      height: 100%;
+      margin: 7px 0 0;
+    }
+
+    .ac {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      display: flex;
+      z-index: 5;
+    }
+
+    .acentr {
+      flex: 1 1 22%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .at {
+      flex: 1 1 auto;
+    }
+
+    .ab {
+      flex: 1 1 auto;
+    }
+
+    .al {
+      flex: 1 1 auto;
+    }
+
+    .ar {
+      flex: 1 1 auto;
+    }
+
+    table {
+      border-spacing: 5px;
+    }
+
+    .td {
+      border: 1px solid #7a7a7a;
+    }
+
+    .l>.button {
+      margin: 0 5px 0 0;
+    }
+    .r {
+      position: relative;
+    }
+
+    .button1 {
+      height: 40px;
+      background-color: rgb(161, 161, 161);
+    }
+    .button1:hover~.settings {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .settings:hover {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .settings {
+      z-index: 6;
+      /* background-color: #a5a5a5; */
+      background-color: gray;
+      border: 5px solid #6768ab;
+      padding: 5px;
+      border-radius: 5px;
+      opacity: 0;
+      pointer-events: none;
+      transition: .3s;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      transform: translateX(-50%);
+      width: 500px;
+      display: flex;
+      flex-direction: column;
+      overflow: auto;
+      padding: 10px;
+    }
+    .settings>* {
+      margin: 5px 0;
+    }
+    input {
+      background-color: rgb(161, 161, 161);
+      border-radius: 5px;
+    }
+    .flex {
+      display: flex;
+    }
+    .disabled {
+      pointer-events: none !important;
+      background-color: gray !important;
+    }
+    span {
+      color: rgb(209, 209, 209);
+    }
+  </style>
+</head>
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<body style="padding: 0; margin: 0; 
+background-color: rgb(90, 90, 90); 
+height: 100vh;">
+<!-- background-color: rgb(56, 56, 56);  -->
+  <div class="wg">
+    <div class="wgc">
+      <div class="wgcc">
+        <div class="top_line flex">
+          <div class="l flex">
+            <button class="button3" onclick="startSnake()" id="go">
+              Начать
+            </button>
+            <button class="button2 disabled" onclick="pauseSnake()" id="pause">
+              Пауза
+            </button>
+            <button class="button2 disabled" onclick="saveSnake()" id="save">
+              Сохранить
+            </button>
+            <button class="button2 disabled" onclick="loadSnake()" id="load">
+              Загрузить
+            </button>
+            <button class="button2 disabled" onclick="stopSnake()" id="stop">
+              Конец
+            </button>
+          </div>
+          <div class="c">
+            <span id="cur" style="margin: 0 10px 0 0;">Current: 0</span>
+            <span id="max">Max: </span>
+          </div>
+          <div class="r">
+            <button class="button1" id="settings" disabled>
+              settings
+            </button>
+            <div class="settings">
+              <div class="button3" onclick="return_settings()">
+                по умолчанию
+              </div>
+              <span>
+                Скорость обновления в мс (больше - медленее):
+                <input type="number" style="width: 100px;" oninput="changGameSpeed(this)" id="speed">
+              </span>
+              <span>
+                Шаг повышения скорости:
+                <input type="number" style="width: 100px;" oninput="changSpeedUp(this)" id="step">
+              </span>
+              <span>
+                Размер ячейки поля:
+                <input type="number" style="width: 100px;" oninput="setCellSize(this)" id="size">
+              </span>
+            </div>
+            <span>fieldX: </span>
+            <input type="number" style="width: 100px;" oninput="changeX(this)" id="nx">
+            <span>fieldY: </span>
+            <input type="number" style="width: 100px;" oninput="changeY(this)" id="ny">
+            <button class="button3" onclick="raschet()" id="raschet">
+              рассчитать
+            </button>
+          </div>
+        </div>
+        <div class="game_container" id="game_container" #target>
+          <div class="ac">
+            <div class="al a" onclick="changeNapravlenie({key: 'a'})"></div>
+            <div class="acentr a">
+              <div class="at" onclick="changeNapravlenie({key: 'w'})"></div>
+              <div class="ab" onclick="changeNapravlenie({key: 's'})"></div>
+            </div>
+            <div class="ar a" onclick="changeNapravlenie({key: 'd'})"></div>
+          </div>
+          <table id="table"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
