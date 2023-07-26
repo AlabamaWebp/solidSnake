@@ -82,12 +82,12 @@ export class AppComponent {
     this.intervalGo();
   }
   intervalGo() {
-    this.game_interval = setInterval(() => {
-      this.gameTick();
-    }, this.game_speed);
+    this.game_interval = setInterval(() => {this.gameTick()}, this.game_speed);
+    console.log(1);
   }
   intervalStop() {
     clearInterval(this.game_interval);
+    console.log(2);
   }
   startSnake() {
     this.norm_game_speed = this.game_speed;
@@ -95,8 +95,8 @@ export class AppComponent {
     this.colorChange(coord[0].x, coord[0].y, "green");
     this.colorChange(coord[1].x, coord[1].y, "green");
     this.game_snake = coord;
-    this.createTarget();
     this.intervalGo();
+    this.createTarget();
     this.game_started = true;
   }
   getRand(max: number) {
