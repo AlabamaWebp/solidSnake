@@ -159,10 +159,10 @@ table {
 }
 .gamepad {
   margin: 5px 0 0;
-  width: 130px;
+  // width: 160px;
   .col {
-    width: 30px;
-    height: 30px;
+    width: 45px;
+    height: 45px;
     border: 1px solid black;
     cursor: pointer;
     div  {
@@ -178,7 +178,7 @@ table {
   justify-content: center;
   align-items: center;
   .gamepad {
-    flex: 0 0 130px;
+    flex: 0 0 170px;
   }
   .game_container {
     flex: 1 1 auto;
