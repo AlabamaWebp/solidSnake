@@ -1,0 +1,146 @@
+@import "./shared/styles/vars.scss";
+@media (min-width: 1200px) {
+  *:not(mat-icon) {
+    font-size: 16px;
+  }
+}
+.wgcc {
+  padding: 5px !important;
+  display: flex;
+  flex-direction: column;
+}
+$top_line: #dfdfdf;
+.top_line {
+  height: 30px;
+  margin: 0;
+  padding: 0;
+  border-radius: 5px;
+  .page {
+    color: black;
+    border: 1px dotted goldenrod;
+    border-radius: 5px;
+    padding: 1px 5px;
+    background-color: #ffffff;
+    cursor: pointer;
+    &:active {
+      transform: scale(.97);
+    }
+    &:hover {
+      transform: scale(1.03);
+    }
+    // text-shadow: 0 0 3px wheat;
+  }
+  .r {
+    display: flex;
+    align-items: center;
+    * {
+      margin: 0 2px;
+    }
+  }
+}
+.game_container {
+  position: relative;
+  overflow: hidden;
+  border: 1px double black;
+  height: 100%;
+  margin: 7px 0 0;
+  .ac {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      display: flex;
+      z-index: 5;
+  
+      .acentr {
+        flex: 1 1 22%;
+        display: flex;
+        flex-direction: column;
+  
+        .at {
+          // background-color: blue;
+          flex: 1 1 auto;
+        }
+  
+        .ab {
+          // background-color: green;
+          flex: 1 1 auto;
+        }
+      }
+  
+      .al {
+        // background-color: red;
+        flex: 1 1 auto;
+      }
+  
+      .ar {
+        // background-color: yellow;
+        flex: 1 1 auto;
+      }
+    }
+}
+$size: 40px - 4px;
+@media (max-width: 1200px) {
+  $size: 30px - 4px;
+  .td {
+    width: $size !important;
+    height: $size !important;
+  }
+}
+table {
+  border-spacing: 5px;
+  .td {
+    border-radius: 100%;
+    border: 1px solid black;
+    width: $size;
+    height: $size;
+    &.clickable {
+      cursor: pointer;
+      transition: .1s;
+      &:hover {
+        transform: scale(1.03);
+      }
+      &:active {
+        transform: scale(.97);
+      }
+    }
+  }
+}
+.l {
+  button {
+    margin: 0 5px 0 0;
+  }
+}
+.r {
+  position: relative;
+}
+.hover_show:hover ~ .settings, .settings:hover {
+  pointer-events: all !important;
+  opacity: 1 !important;
+}
+.top_line { align-items: center; }
+.settings {
+  pointer-events: none;
+  opacity: 0;
+
+  background-color: $z8_color;
+  z-index: 10;
+  transition: .5s;
+  border-radius: 5px;
+  border: 3px solid $violet;
+  position: absolute; 
+  top: 100%;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: auto;
+  padding: 10px;
+  width: 300px;
+  max-height: 67vh;
+  overflow: auto;
+  span {
+    margin: 7px 0 !important;
+  }
+}
