@@ -83,11 +83,9 @@ export class AppComponent {
   }
   intervalGo() {
     this.game_interval = setInterval(() => {this.gameTick()}, this.game_speed);
-    console.log(1);
   }
   intervalStop() {
     clearInterval(this.game_interval);
-    console.log(2);
   }
   startSnake() {
     this.norm_game_speed = this.game_speed;
