@@ -65,7 +65,6 @@ export class AppComponent {
   }
   game_started = false;
   stopSnake() {
-    console.log(this.game_interval);
     this.intervalStop();
     this.clearField();
     this.game_started = false;
@@ -117,7 +116,6 @@ export class AppComponent {
     this.game_speed -= this.speed_up;
     this.refreshInterval();
     this.target = t;
-    ++this.bals;
   }
   target: { x: number, y: number } = this.createRandPos();
   game_snake: { x: number, y: number }[] = [];
@@ -133,6 +131,7 @@ export class AppComponent {
   }
   createNewSnake() {
     this.napravlenie = this.tmp_napravlenie;
+    console.log(this.game_snake.length, this.napravlenie);
     switch (this.napravlenie) {
       case 0:
         this.game_snake.unshift({ x: this.game_snake[0].x, y: this.game_snake[0].y - 1 });
@@ -147,8 +146,10 @@ export class AppComponent {
         this.game_snake.unshift({ x: this.game_snake[0].x - 1, y: this.game_snake[0].y });
         break;
     }
+    
     if (this.game_snake[0].x == this.target.x && this.game_snake[0].y == this.target.y) {
       this.createTarget();
+      ++this.bals;
     }
     else {
       this.game_snake.pop();
@@ -260,7 +261,7 @@ export class AppComponent {
       snake += `${this.game_snake[i].x},${this.game_snake[i].y}/`;
     }
     snake = snake.slice(0, snake.length - 1);
-    const save = `${this.x};${this.y};${snake};${apple};${this.bals};${this.game_speed}`;
+    const save = `${this.x};${this.y};${snake};${apple};${this.bals};${this.game_speed};${this.napravlenie}`;
     localStorage.setItem("save", save);
     document.getElementById('save')?.setAttribute("disabled", "")
   }
@@ -271,7 +272,7 @@ export class AppComponent {
       this.x = Number(m[0]);
       this.y = Number(m[1]);
       const snake = m[2].split('/');
-      this.game_snake = []
+      this.game_snake = [];
       for (let i = 0; i < snake.length; i++) {
         const tmp_snake = snake[i].split(',');
         this.game_snake.push({
@@ -279,13 +280,19 @@ export class AppComponent {
           y: Number(tmp_snake[1]),
         });
       }
+      
       const tmp_t = m[3].split(',');
       this.target = { x: Number(tmp_t[0]), y: Number(tmp_t[1]) };
       this.bals = Number(m[4]);
       this.game_speed = Number(m[5]);
+      this.napravlenie = Number(m[6]); this.tmp_napravlenie = Number(m[6]);
     }
+    this.game_started = true;
+    this.is_pause = true;
     this.changeFieldSize();
-    this.refreshSnakeColors();
+    setTimeout(() => {
+      this.refreshSnakeColors();
+    }, 1);
 
     // this.startSnake();
   }
