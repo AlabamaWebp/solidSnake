@@ -11,6 +11,17 @@ export class AppComponent {
   ngOnInit(): void {
     this.initLocalStorage();
   }
+  @HostListener('window:resize', ['$event'])
+  setWindowSize() {
+    this.wx = window.innerWidth;
+    this.wy = window.innerHeight;
+    if (!this.game_started) {
+      this.raschet();
+    }    
+  }
+
+  wx = 0;
+  wy = 0;
 
   ngAfterViewInit() {
     setTimeout(() => {

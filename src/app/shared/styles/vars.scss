@@ -5,6 +5,9 @@
 :root[dark=''] {
     --z8_color: #5c5c5c;
     --back: black;
+    span {
+        color: rgb(216, 216, 216);
+      }
 }
 $z8_color: var(--z8_color); //#d9d9d97c #eaeaea
 $background: var(--back);

@@ -7,6 +7,14 @@
     display: flex;
     flex-direction: column;
   }
+  .settings {
+    width: 280px !important;
+  }
+}
+:root[dark=''] {
+  span {
+    color: white !important;
+  }
 }
 .wgcc {
   padding: 5px !important;
