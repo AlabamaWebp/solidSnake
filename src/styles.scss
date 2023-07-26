@@ -4,6 +4,9 @@ html, body, .mat-body, .mat-body-1, .mat-typography {
     margin: 0;
     font: 400 14px / 20px Roboto, "Helvetica Neue", sans-serif !important; 
 }
+body {
+    background-color: $background;
+}
 .wg {
     width: 100%;
     height: 100%;

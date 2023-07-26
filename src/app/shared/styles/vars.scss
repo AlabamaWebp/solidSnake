@@ -1,3 +1,12 @@
-$z8_color: #eaeaea; //#d9d9d97c
+:root {
+    --z8_color: #eaeaea;
+    --back: white;
+}
+:root[dark=''] {
+    --z8_color: #5c5c5c;
+    --back: black;
+}
+$z8_color: var(--z8_color); //#d9d9d97c #eaeaea
+$background: var(--back);
 $violet: #6768ab;
 $magic_shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);

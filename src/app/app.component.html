@@ -25,7 +25,7 @@
           </button>
           <button class="button2" 
           (click)="loadSnake()"
-          *ngIf="!game_started">
+          *ngIf="!game_started || is_pause">
             Загрузить
           </button>
           <!-- <button class="button2"
@@ -39,7 +39,7 @@
         </div>
         <div class="r">
           <button class="button1 hover_show" style="padding: 2px 5px; height: 33px !important;" 
-            [disabled]="game_started"
+            *ngIf="!game_started"
             [style.pointerEvents]="game_started ? 'none' : 'all'">
             Настройки
           </button>

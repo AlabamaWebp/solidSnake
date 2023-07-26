@@ -1,7 +1,11 @@
 @import "./shared/styles/vars.scss";
-@media (min-width: 1200px) {
-  *:not(mat-icon) {
-    font-size: 16px;
+@media (max-width: 400px) {
+  .button1,.button2,.button3 {
+    padding: 0 5px !important;
+  }
+  .c {
+    display: flex;
+    flex-direction: column;
   }
 }
 .wgcc {
