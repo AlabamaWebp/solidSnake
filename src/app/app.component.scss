@@ -53,10 +53,11 @@ $top_line: #dfdfdf;
 .game_container {
   position: relative;
   overflow: hidden;
-  border: 1px double black;
+  
   height: 100%;
   width: 100%;
   flex: 1 1 auto;
+  table {border: 1px double black;}
   .ac {
       position: absolute;
       top: 0;
@@ -132,7 +133,7 @@ table {
   pointer-events: all !important;
   opacity: 1 !important;
 }
-.top_line { align-items: center; flex: 0 0 30px; }
+.top_line { align-items: center; flex: 0 0 42px; }
 .settings {
   pointer-events: none;
   opacity: 0;

@@ -14,9 +14,11 @@ export class AppComponent {
   }
   @HostListener('window:resize', ['$event'])
   setWindowSize() {
-    this.wx = window.innerWidth;
-    this.wy = window.innerHeight;
-    if (this.wx > this.wy) {
+    // this.wx = window.innerWidth;
+    // this.wy = window.innerHeight;
+    const x = window.innerWidth;
+    const y = window.innerHeight;
+    if (x > y) {
       this.landing = true;
     }
     else {
@@ -29,13 +31,13 @@ export class AppComponent {
     }    
   }
   landing = false;
-  wx = 0;
-  wy = 0;
+  // wx = 0;
+  // wy = 0;
 
   ngAfterViewInit() {
-    setTimeout(() => {
-      this.raschet();
-    }, 10);
+    // setTimeout(() => {
+    //   this.raschet();
+    // }, 10);
   }
 
   changeFieldSize() {
@@ -59,10 +61,15 @@ export class AppComponent {
 
   raschet() {
     const el = document.getElementById('game_container') as HTMLElement;
+      this.x = 1;
+      this.y = 1;
+      this.changeFieldSize();
 
-    this.x = Math.floor(el.clientWidth / (this.cell_size + 5 + 4));
-    this.y = Math.floor((el.clientHeight / (this.cell_size + 5 + 4)));
-    this.changeFieldSize();
+    setTimeout(() => {
+      this.x = Math.floor(el.clientWidth / (this.cell_size + 5 + 4));
+      this.y = Math.floor((el.clientHeight / (this.cell_size + 5 + 4)));
+      this.changeFieldSize();
+    }, 10);
   }
   getCenter() {
     return [{
@@ -207,6 +214,17 @@ export class AppComponent {
     }
   }
   tmp_napravlenie = this.napravlenie;
+
+  @HostListener('window:keydown', ['$event'])
+  faster(ev: any)
+  {
+    // console.log(ev.key);
+    if (ev.key == ' ') {
+      this.intervalStop();
+      // this.intervalGo();
+      this.game_interval = setInterval(() => {this.gameTick()}, this.game_speed-30);
+    }
+  }
   @HostListener('window:keyup', ['$event'])
   changeNapravlenie(ev: any) {
     switch (ev.key) {
@@ -233,6 +251,9 @@ export class AppComponent {
         return;
       case 'ArrowLeft':
         this.napravlenie != 1 ? this.tmp_napravlenie = 3 : 0;
+        return;
+      case ' ':
+        this.refreshInterval()
         return;
     }
   }
