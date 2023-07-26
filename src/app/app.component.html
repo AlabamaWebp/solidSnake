@@ -79,25 +79,44 @@
           </div>
         </div>
       </div>
-      <div class="game_container" id="game_container">
-        <div class="ac">
-          <div class="al a" (click)="changeNapravlenie({key: 'a'})"></div>
-          <div class="acentr a">
-            <div class="at" (click)="changeNapravlenie({key: 'w'})"></div>
-            <div class="ab" (click)="changeNapravlenie({key: 's'})"></div>
-          </div>
-          <div class="ar a" (click)="changeNapravlenie({key: 'd'})"></div>
+      <div class="game_wrapper" [style.flexDirection]="landing ? '' : 'column'">
+        <div class="game_container" id="game_container">
+          <!-- <div class="ac">
+            <div class="al a" (click)="changeNapravlenie({key: 'a'})"></div>
+            <div class="acentr a">
+              <div class="at" (click)="changeNapravlenie({key: 'w'})"></div>
+              <div class="ab" (click)="changeNapravlenie({key: 's'})"></div>
+            </div>
+            <div class="ar a" (click)="changeNapravlenie({key: 'd'})"></div>
+          </div> -->
+          <table>
+            <tr *ngFor="let row of field">
+              <td *ngFor="let col of row.cols"
+              class="td y{{row.rowId}}! x{{col.colId}}"
+              [style.width]="cell_size + 'px !important'"
+              [style.height]="cell_size + 'px !important'"
+              >
+              <!-- [style.backgroundColor]="col.fill"  -->
+  
+              </td>
+            </tr>
+          </table>
         </div>
-        <table>
-          <tr *ngFor="let row of field">
-            <td *ngFor="let col of row.cols"
-            class="td y{{row.rowId}}! x{{col.colId}}"
-            [style.width]="cell_size + 'px !important'"
-            [style.height]="cell_size + 'px !important'"
-            >
-            <!-- [style.backgroundColor]="col.fill"  -->
-
-            </td>
+        <table class="gamepad">
+          <tr class="row">
+            <td class=""></td>
+            <td class="col" (click)="changeNapravlenie({key: 'w'})"><div style="transform: rotate(-90deg);">></div></td>
+            <td class=""></td>
+          </tr>
+          <tr class="row">
+            <td class="col" (click)="changeNapravlenie({key: 'a'})"><div><</div></td>
+            <td class="col"><div>o</div></td>
+            <td class="col" (click)="changeNapravlenie({key: 'd'})"><div>></div></td>
+          </tr>
+          <tr class="row">
+            <td class=""></td>
+            <td class="col" (click)="changeNapravlenie({key: 's'})"><div style="transform: rotate(90deg);">></div></td>
+            <td class=""></td>
           </tr>
         </table>
       </div>

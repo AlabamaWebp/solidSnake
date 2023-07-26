@@ -10,16 +10,25 @@ export class AppComponent {
 
   ngOnInit(): void {
     this.initLocalStorage();
+    this.setWindowSize();
   }
   @HostListener('window:resize', ['$event'])
   setWindowSize() {
     this.wx = window.innerWidth;
     this.wy = window.innerHeight;
+    if (this.wx > this.wy) {
+      this.landing = true;
+    }
+    else {
+      this.landing = false;
+    }
     if (!this.game_started) {
-      this.raschet();
+      setTimeout(() => {
+        this.raschet();
+      }, 10);
     }    
   }
-
+  landing = false;
   wx = 0;
   wy = 0;
 

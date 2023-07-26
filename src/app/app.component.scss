@@ -55,7 +55,8 @@ $top_line: #dfdfdf;
   overflow: hidden;
   border: 1px double black;
   height: 100%;
-  margin: 7px 0 0;
+  width: 100%;
+  flex: 1 1 auto;
   .ac {
       position: absolute;
       top: 0;
@@ -131,7 +132,7 @@ table {
   pointer-events: all !important;
   opacity: 1 !important;
 }
-.top_line { align-items: center; }
+.top_line { align-items: center; flex: 0 0 30px; }
 .settings {
   pointer-events: none;
   opacity: 0;
@@ -151,8 +152,34 @@ table {
   padding: 10px;
   width: 300px;
   max-height: 67vh;
-  overflow: auto;
   span {
     margin: 7px 0 !important;
+  }
+}
+.gamepad {
+  margin: 5px 0 0;
+  width: 130px;
+  .col {
+    width: 30px;
+    height: 30px;
+    border: 1px solid black;
+    cursor: pointer;
+    div  {
+      display: flex;justify-content: center;align-items: center;
+    }
+  }
+}
+.game_wrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  // flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .gamepad {
+    flex: 0 0 130px;
+  }
+  .game_container {
+    flex: 1 1 auto;
   }
 }

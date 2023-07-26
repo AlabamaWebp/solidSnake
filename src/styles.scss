@@ -1,11 +1,12 @@
 @import "./app/shared/styles/vars.scss";
 html, body, .mat-body, .mat-body-1, .mat-typography {
-    height: 100%;
+    height: 100vh;
     margin: 0;
     font: 400 14px / 20px Roboto, "Helvetica Neue", sans-serif !important; 
 }
 body {
     background-color: $background;
+    overflow: hidden;
 }
 .wg {
     width: 100%;
