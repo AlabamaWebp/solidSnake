@@ -100,6 +100,7 @@ export class AppComponent {
     this.clearField();
     this.game_started = false;
     this.napravlenie = 1;
+    this.tmp_napravlenie = 1;
     this.game_speed = this.norm_game_speed;
     if (this.max_bals < this.bals) {
       this.max_bals = this.bals;
