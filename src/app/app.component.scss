@@ -158,6 +158,8 @@ table {
   }
 }
 .gamepad {
+  font-size: 30px;
+  color: rgb(29, 29, 29);
   user-select: none;
   margin: 5px 0 0;
   // width: 160px;
@@ -179,9 +181,16 @@ table {
   justify-content: center;
   align-items: center;
   .gamepad {
-    flex: 0 0 170px;
+    flex: 0 0 210px;
   }
   .game_container {
     flex: 1 1 auto;
   }
+}
+.gred {
+  background-color: rgb(177, 177, 177);
+}
+.ggreen {
+  // background-color: $violet;
+  background-color: #858585;
 }
