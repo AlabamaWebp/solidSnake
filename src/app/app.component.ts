@@ -70,8 +70,8 @@ export class AppComponent {
       this.changeFieldSize();
 
     setTimeout(() => {
-      this.x = Math.floor(el.clientWidth / (this.cell_size + 5 + 4)-1);
-      this.y = Math.floor((el.clientHeight / (this.cell_size + 5 + 4))-1);
+      this.x = Math.floor(el.clientWidth / (this.cell_size + 5 + 4));
+      this.y = Math.floor((el.clientHeight / (this.cell_size + 5 + 4)));
       this.changeFieldSize();
     }, 10);
   }
@@ -221,10 +221,17 @@ export class AppComponent {
   }
   tmp_napravlenie = this.napravlenie;
 
+  clickKrug() {
+    if (this.is_acceleration) {
+      this.changeNapravlenie({key: ' '});
+    }
+    else {
+      this.faster({key: ' '});
+    }
+  }
   @HostListener('window:keydown', ['$event'])
   faster(ev: any)
   {
-    console.log(ev.key.length, ev.key);
     if (ev.key == ' ' && !this.is_acceleration) {
       this.is_acceleration = true;
       this.intervalStop();
@@ -264,6 +271,11 @@ export class AppComponent {
         return;
       case 'ArrowLeft':
         this.napravlenie != 1 ? this.tmp_napravlenie = 3 : 0;
+        return;
+        case 'Enter':
+        if (!this.game_started) {
+          this.startSnake();
+        }
         return;
       case ' ':
         this.is_acceleration = false;
@@ -329,7 +341,7 @@ export class AppComponent {
       snake += `${this.game_snake[i].x},${this.game_snake[i].y}/`;
     }
     snake = snake.slice(0, snake.length - 1);
-    const save = `${this.x};${this.y};${snake};${apple};${this.bals};${this.game_speed};${this.napravlenie}`;
+    const save = `${this.x};${this.y};${snake};${apple};${this.bals};${this.game_speed};${this.napravlenie};${this.acceleration}`;
     localStorage.setItem("save", save);
     document.getElementById('save')?.setAttribute("disabled", "")
   }
@@ -354,6 +366,7 @@ export class AppComponent {
       this.bals = Number(m[4]);
       this.game_speed = Number(m[5]);
       this.napravlenie = Number(m[6]); this.tmp_napravlenie = Number(m[6]);
+      this.acceleration = Number(m[7]);
     }
     this.game_started = true;
     this.is_pause = true;

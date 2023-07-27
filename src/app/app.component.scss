@@ -158,6 +158,7 @@ table {
   }
 }
 .gamepad {
+  user-select: none;
   margin: 5px 0 0;
   // width: 160px;
   .col {
