@@ -9,9 +9,9 @@ export class AppComponent {
   constructor() { }
 
   ngOnInit(): void {
-    this.initLocalStorage();
     this.setWindowSize();
-    this.raschet();
+    this.initLocalStorage();
+    this.changeFieldSize();
   }
   @HostListener('window:resize', ['$event'])
   setWindowSize() {
@@ -72,21 +72,24 @@ export class AppComponent {
       this.y = 1;
       this.changeFieldSize();
       setTimeout(() => {
-        this.x = Math.floor(el.clientWidth / (this.cell_size + 5 + 4));
-        this.y = Math.floor((el.clientHeight / (this.cell_size + 5 + 4)));
+        this.setFieldX(Math.floor(el.clientWidth / (this.cell_size + 5 + 4)));
+        this.setFieldY(Math.floor((el.clientHeight / (this.cell_size + 5 + 4))));
         this.changeFieldSize();
       }, 10);
     }
     else {
       let tmpE = el.clientWidth < el.clientHeight ? el.clientWidth : el.clientHeight;
       let tmpX = this.x < this.y ? this.x : this.y;
-      this.cell_size = Math.floor((tmpE) / (tmpX)) - 5 - 4;
+      this.setCellSize(Math.floor((tmpE) / (tmpX)) - 5 - 4);
       this.changeFieldSize();
+      // localStorage.removeItem("cell_size_s");
     }
+    // localStorage.removeItem("x");
+    // localStorage.removeItem("y");
   }
   setSchet() {
     this.schet_po_size = !this.schet_po_size;
-    localStorage.setItem("schet", this.schet_po_size ? "1" : "0")
+    this.schet_po_size ? localStorage.setItem("schet", "1") : localStorage.removeItem("schet");
   }
   getCenter() {
     return [{
@@ -182,7 +185,6 @@ export class AppComponent {
   }
   createNewSnake() {
     this.napravlenie = this.tmp_napravlenie;
-    // console.log(this.game_snake.length, this.napravlenie);
     switch (this.napravlenie) {
       case 0:
         this.game_snake.unshift({ x: this.game_snake[0].x, y: this.game_snake[0].y - 1 });
@@ -350,6 +352,12 @@ export class AppComponent {
     if (localStorage.getItem('schet')) {
       this.schet_po_size = localStorage.getItem('schet') == '1' ? true : false;
     }
+    if (localStorage.getItem('x')) {
+      this.x = Number(localStorage.getItem("x"));
+    }
+    if (localStorage.getItem('y')) {
+      this.y = Number(localStorage.getItem("y"));
+    }
   }
   is_pause = false;
   pauseSnake() {
@@ -415,5 +423,15 @@ export class AppComponent {
       document.documentElement.setAttribute("dark","0");
       localStorage.setItem("dark", '0')
     }
+  }
+  setFieldX(n: number) {
+    this.x = n;
+    localStorage.setItem("x", this.x+"");
+    this.changeFieldSize()
+  }
+  setFieldY(n: number) {
+    this.y = n;
+    localStorage.setItem("y", this.y+"");
+    this.changeFieldSize()
   }
 }

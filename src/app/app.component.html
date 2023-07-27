@@ -64,11 +64,11 @@
             </span>
             <span>fieldX: 
               <input type="number" [value]="x" style="width: 100px;" 
-                (input)="x = x1.valueAsNumber;changeFieldSize()" #x1>
+                (input)="setFieldX(x1.valueAsNumber)" #x1>
             </span>
             <span>fieldY: 
               <input type="number" [value]="y" style="width: 100px;" 
-                (input)="y = y1.valueAsNumber;changeFieldSize()" #y1>
+                (input)="setFieldY(y1.valueAsNumber);" #y1>
             </span>
             <span>
               Ускорение
@@ -76,7 +76,7 @@
                 (change)="setAcceleration(acc.valueAsNumber)" #acc>
             </span>
             <button class="{{schet_po_size ? 'button3' : 'button2'}}" 
-            (click)="schet_po_size = !schet_po_size">
+            (click)="setSchet()">
               {{schet_po_size ? 'Рассчывать размер поля' : 'Рассчывать размер ячейки'}}
             </button>
             <button class="button2" (click)="setTheme(true)">
