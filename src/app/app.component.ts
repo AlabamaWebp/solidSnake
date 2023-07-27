@@ -24,11 +24,11 @@ export class AppComponent {
     else {
       this.landing = false;
     }
-    if (!this.game_started) {
-      setTimeout(() => {
-        this.raschet();
-      }, 10);
-    }    
+    // if (!this.game_started) {
+    //   setTimeout(() => {
+    //     this.raschet();
+    //   }, 10);
+    // }    
   }
   landing = false;
   // wx = 0;
