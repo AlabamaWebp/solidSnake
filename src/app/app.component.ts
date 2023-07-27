@@ -82,10 +82,7 @@ export class AppComponent {
       let tmpX = this.x < this.y ? this.x : this.y;
       this.setCellSize(Math.floor((tmpE) / (tmpX)) - 5 - 4);
       this.changeFieldSize();
-      // localStorage.removeItem("cell_size_s");
     }
-    // localStorage.removeItem("x");
-    // localStorage.removeItem("y");
   }
   setSchet() {
     this.schet_po_size = !this.schet_po_size;
