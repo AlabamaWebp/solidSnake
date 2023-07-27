@@ -43,6 +43,10 @@ export class AppComponent {
   changeFieldSize() {
     const x = this.x;
     const y = this.y;
+    if (x > 800 || y > 800) {
+      alert("ненадо много");
+      return;
+    }
     this.field = []
     for (let i = 0; i < y; i++) {
       let tmp = []
