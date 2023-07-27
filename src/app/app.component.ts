@@ -61,19 +61,32 @@ export class AppComponent {
   pages = [1];
   field: any = [];
   // settings = false;
-  x = 47;
-  y = 20;
+  x = 10;
+  y = 10;
 
+  schet_po_size = false;
   raschet() {
     const el = document.getElementById('game_container') as HTMLElement;
-    this.x = 1;
-    this.y = 1;
-    this.changeFieldSize();
-    setTimeout(() => {
-      this.x = Math.floor(el.clientWidth / (this.cell_size + 5 + 4));
-      this.y = Math.floor((el.clientHeight / (this.cell_size + 5 + 4)));
+    if (this.schet_po_size) {
+      this.x = 1;
+      this.y = 1;
       this.changeFieldSize();
-    }, 10);
+      setTimeout(() => {
+        this.x = Math.floor(el.clientWidth / (this.cell_size + 5 + 4));
+        this.y = Math.floor((el.clientHeight / (this.cell_size + 5 + 4)));
+        this.changeFieldSize();
+      }, 10);
+    }
+    else {
+      let tmpE = el.clientWidth < el.clientHeight ? el.clientWidth : el.clientHeight;
+      let tmpX = this.x < this.y ? this.x : this.y;
+      this.cell_size = Math.floor((tmpE) / (tmpX)) - 5 - 4;
+      this.changeFieldSize();
+    }
+  }
+  setSchet() {
+    this.schet_po_size = !this.schet_po_size;
+    localStorage.setItem("schet", this.schet_po_size ? "1" : "0")
   }
   getCenter() {
     return [{
@@ -333,6 +346,9 @@ export class AppComponent {
     }
     if (localStorage.getItem("acceleration")) {
       this.acceleration = Number(localStorage.getItem("acceleration"));
+    }
+    if (localStorage.getItem('schet')) {
+      this.schet_po_size = localStorage.getItem('schet') == '1' ? true : false;
     }
   }
   is_pause = false;

@@ -75,11 +75,15 @@
               <input type="number" [value]="acceleration" style="width: 100px;" 
                 (change)="setAcceleration(acc.valueAsNumber)" #acc>
             </span>
+            <button class="{{schet_po_size ? 'button3' : 'button2'}}" 
+            (click)="schet_po_size = !schet_po_size">
+              {{schet_po_size ? 'Рассчывать размер поля' : 'Рассчывать размер ячейки'}}
+            </button>
             <button class="button2" (click)="setTheme(true)">
               Сменить тему
             </button>
             <button class="button3" (click)="raschet()">
-              рассчитать
+              Рассчитать
             </button>
           </div>
         </div>
