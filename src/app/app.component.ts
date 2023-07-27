@@ -66,8 +66,8 @@ export class AppComponent {
       this.changeFieldSize();
 
     setTimeout(() => {
-      this.x = Math.floor(el.clientWidth / (this.cell_size + 5 + 4));
-      this.y = Math.floor((el.clientHeight / (this.cell_size + 5 + 4)));
+      this.x = Math.floor(el.clientWidth / (this.cell_size + 5 + 4)-1);
+      this.y = Math.floor((el.clientHeight / (this.cell_size + 5 + 4))-1);
       this.changeFieldSize();
     }, 10);
   }
@@ -147,7 +147,7 @@ export class AppComponent {
   target: { x: number, y: number } = this.createRandPos();
   game_snake: { x: number, y: number }[] = [];
   norm_game_speed = 300;
-  game_speed = 180;
+  game_speed = 300;
   speed_up = 2;
   game_interval: any;
   napravlenie: number = 1;
@@ -181,9 +181,9 @@ export class AppComponent {
     else {
       this.game_snake.pop();
     }
-    if (this.game_snake[0].x > this.x
+    if (this.game_snake[0].x >= this.x
       || this.game_snake[0].x < 0
-      || this.game_snake[0].y > this.y
+      || this.game_snake[0].y >= this.y
       || this.game_snake[0].y < 0) {
       this.stopSnake();
       alert("Вы проиграли");
@@ -202,7 +202,9 @@ export class AppComponent {
   refreshSnakeColors() {
     this.clearField();
     this.colorChange(this.target.x, this.target.y, "red");
-    for (let i = 0; i < this.game_snake.length; i++) {
+    // rgb(0, 90, 0)
+    this.colorChange(this.game_snake[0].x, this.game_snake[0].y, "rgb(0, 90, 0)");
+    for (let i = 1; i < this.game_snake.length; i++) {
       this.colorChange(this.game_snake[i].x, this.game_snake[i].y, "green");
     }
   }
@@ -289,6 +291,10 @@ export class AppComponent {
     if (localStorage.getItem("game_speed_s")) {
       this.game_speed = Number(localStorage.getItem("game_speed_s"));
     }
+    if (localStorage.getItem("dark")) {
+      this.dark_theme = localStorage.getItem("dark") == "1" ? true : false;
+      this.setTheme();
+    }
   }
   is_pause = false;
   pauseSnake() {
@@ -336,5 +342,20 @@ export class AppComponent {
     }, 1);
 
     // this.startSnake();
+  }
+  dark_theme = true;
+  toggleTheme() {
+    this.dark_theme = !this.dark_theme;
+  }
+  setTheme(toggle = false) {
+    toggle ? this.toggleTheme() : 0;
+    if (this.dark_theme){
+      document.documentElement.setAttribute("dark","1");
+      localStorage.setItem("dark", '1')
+    }
+    else {
+      document.documentElement.setAttribute("dark","0");
+      localStorage.setItem("dark", '0')
+    }
   }
 }

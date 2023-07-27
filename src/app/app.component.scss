@@ -3,13 +3,13 @@
   .button1,.button2,.button3 {
     padding: 0 5px !important;
   }
-  .c {
-    display: flex;
-    flex-direction: column;
-  }
   .settings {
     width: 280px !important;
   }
+}
+.c {
+  display: flex;
+  flex-direction: column;
 }
 :root[dark=''] {
   span {
@@ -105,7 +105,7 @@ $size: 40px - 4px;
 table {
   border-spacing: 5px;
   .td {
-    border-radius: 100%;
+    // border-radius: 100%;
     border: 1px solid black;
     width: $size;
     height: $size;
@@ -153,7 +153,7 @@ table {
   padding: 10px;
   width: 300px;
   max-height: 67vh;
-  span {
+  span, .button2, .button3 {
     margin: 7px 0 !important;
   }
 }

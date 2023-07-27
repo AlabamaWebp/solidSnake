@@ -16,7 +16,7 @@
           <button class="button2" 
           (click)="pauseSnake()"
           *ngIf="game_started">
-            {{is_pause ? 'Вознобить' : 'Пауза'}}
+            {{is_pause ? 'Продолжить' : 'Пауза'}}
           </button>
           <button class="button3" 
           (click)="saveSnake()"
@@ -64,16 +64,16 @@
             </span>
             <span>fieldX: 
               <input type="number" [value]="x" style="width: 100px;" 
-                (input)="x = x1.valueAsNumber;changeFieldSize()" #x1
-                [disabled]="game_started">
+                (input)="x = x1.valueAsNumber;changeFieldSize()" #x1>
             </span>
             <span>fieldY: 
               <input type="number" [value]="y" style="width: 100px;" 
-                (input)="y = y1.valueAsNumber;changeFieldSize()" #y1
-                [disabled]="game_started">
+                (input)="y = y1.valueAsNumber;changeFieldSize()" #y1>
             </span>
-            <button class="button3" (click)="raschet()"
-              [disabled]="game_started">
+            <button class="button2" (click)="setTheme(true)">
+              Сменить тему
+            </button>
+            <button class="button3" (click)="raschet()">
               рассчитать
             </button>
           </div>
@@ -81,14 +81,6 @@
       </div>
       <div class="game_wrapper" [style.flexDirection]="landing ? '' : 'column'">
         <div class="game_container" id="game_container">
-          <!-- <div class="ac">
-            <div class="al a" (click)="changeNapravlenie({key: 'a'})"></div>
-            <div class="acentr a">
-              <div class="at" (click)="changeNapravlenie({key: 'w'})"></div>
-              <div class="ab" (click)="changeNapravlenie({key: 's'})"></div>
-            </div>
-            <div class="ar a" (click)="changeNapravlenie({key: 'd'})"></div>
-          </div> -->
           <table>
             <tr *ngFor="let row of field">
               <td *ngFor="let col of row.cols"

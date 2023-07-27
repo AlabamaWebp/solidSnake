@@ -1,8 +1,8 @@
 :root {
-    --z8_color: #eaeaea;
+    --z8_color: #dfdfdf;
     --back: white;
 }
-:root[dark=''] {
+:root[dark='1'] {
     --z8_color: #5c5c5c;
     --back: black;
     span {
