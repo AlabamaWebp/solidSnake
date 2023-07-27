@@ -11,6 +11,7 @@ export class AppComponent {
   ngOnInit(): void {
     this.initLocalStorage();
     this.setWindowSize();
+    this.raschet();
   }
   @HostListener('window:resize', ['$event'])
   setWindowSize() {
@@ -65,10 +66,9 @@ export class AppComponent {
 
   raschet() {
     const el = document.getElementById('game_container') as HTMLElement;
-      this.x = 1;
-      this.y = 1;
-      this.changeFieldSize();
-
+    this.x = 1;
+    this.y = 1;
+    this.changeFieldSize();
     setTimeout(() => {
       this.x = Math.floor(el.clientWidth / (this.cell_size + 5 + 4));
       this.y = Math.floor((el.clientHeight / (this.cell_size + 5 + 4)));
@@ -97,7 +97,7 @@ export class AppComponent {
   game_started = false;
   stopSnake() {
     this.intervalStop();
-    this.clearField();
+    // this.clearField();
     this.game_started = false;
     this.napravlenie = 1;
     this.tmp_napravlenie = 1;
@@ -105,8 +105,11 @@ export class AppComponent {
     if (this.max_bals < this.bals) {
       this.max_bals = this.bals;
       localStorage.setItem("snake_max", this.max_bals + "");
+      this.color_bals = "green !important";
     }
-    this.bals = 0;
+    else {
+      this.color_bals = "red !important";
+    }
   }
   refreshInterval() {
     this.intervalStop();
@@ -119,14 +122,17 @@ export class AppComponent {
     clearInterval(this.game_interval);
   }
   startSnake() {
+    this.clearField();
     this.norm_game_speed = this.game_speed;
     const coord = this.getCenter();
-    this.colorChange(coord[0].x, coord[0].y, "green");
+    this.colorChange(coord[0].x, coord[0].y, "rgb(0, 90, 0)");
     this.colorChange(coord[1].x, coord[1].y, "green");
     this.game_snake = coord;
     this.intervalGo();
     this.createTarget();
     this.game_started = true;
+    this.bals = 0;
+    this.color_bals = '';
   }
   getRand(max: number) {
     return Math.floor(Math.random() * max);
@@ -191,19 +197,18 @@ export class AppComponent {
       || this.game_snake[0].y >= this.y
       || this.game_snake[0].y < 0) {
       this.stopSnake();
-      alert("Вы проиграли");
       return;
     }
     for (let i = 0; i < this.game_snake.length; i++) {
       if ((this.game_snake[0].x == this.game_snake[i == 0 ? 1 : i].x && this.game_snake[0].y == this.game_snake[i == 0 ? 1 : i].y)) {
         this.stopSnake();
-        alert("Вы проиграли");
         return;
       }
     }
     this.refreshSnakeColors();
     return;
   }
+  color_bals = '';
   refreshSnakeColors() {
     this.clearField();
     this.colorChange(this.target.x, this.target.y, "red");
@@ -347,8 +352,10 @@ export class AppComponent {
     document.getElementById('save')?.setAttribute("disabled", "")
   }
   loadSnake() {
+    
     const data = localStorage.getItem("save");
     if (data) {
+      this.color_bals = '';
       let m = data.split(';');
       this.x = Number(m[0]);
       this.y = Number(m[1]);
