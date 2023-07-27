@@ -94,21 +94,22 @@ $top_line: #dfdfdf;
       }
     }
 }
-$size: 40px - 4px;
-@media (max-width: 1200px) {
-  $size: 30px - 4px;
-  .td {
-    width: $size !important;
-    height: $size !important;
-  }
-}
+// $size: 40px - 4px;
+// @media (max-width: 1200px) {
+//   $size: 30px - 4px;
+//   .td {
+//     width: $size !important;
+//     height: $size !important;
+//   }
+// }
 table {
   border-spacing: 5px;
   .td {
     // border-radius: 100%;
     border: 1px solid black;
-    width: $size;
-    height: $size;
+    background-color: #9e9e9e;
+    // width: $size;
+    // height: $size;
     &.clickable {
       cursor: pointer;
       transition: .1s;
