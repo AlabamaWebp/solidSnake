@@ -25,20 +25,13 @@ export class AppComponent {
     else {
       this.landing = false;
     }
-    // if (!this.game_started) {
-    //   setTimeout(() => {
-    //     this.raschet();
-    //   }, 10);
-    // }    
   }
   landing = false;
   // wx = 0;
   // wy = 0;
 
   ngAfterViewInit() {
-    // setTimeout(() => {
-    //   this.raschet();
-    // }, 10);
+
   }
 
   changeFieldSize() {
@@ -78,10 +71,14 @@ export class AppComponent {
       }, 10);
     }
     else {
-      let tmpE = el.clientWidth < el.clientHeight ? el.clientWidth : el.clientHeight;
-      let tmpX = this.x < this.y ? this.x : this.y;
-      this.setCellSize(Math.floor((tmpE) / (tmpX)) - 5 - 4);
+      this.cell_size = 14;
       this.changeFieldSize();
+      setTimeout(() => {
+        let tmpE = el.clientWidth < el.clientHeight ? el.clientWidth : el.clientHeight;
+        let tmpX = this.x < this.y ? this.x : this.y;
+        this.setCellSize(Math.floor((tmpE) / (tmpX)) - 5);
+        this.changeFieldSize();
+      }, 10);
     }
   }
   setSchet() {
@@ -118,10 +115,6 @@ export class AppComponent {
     if (this.max_bals < this.bals) {
       this.max_bals = this.bals;
       localStorage.setItem("snake_max", this.max_bals + "");
-      this.color_bals = "green !important";
-    }
-    else {
-      this.color_bals = "red !important";
     }
   }
   refreshInterval() {
@@ -145,7 +138,6 @@ export class AppComponent {
     this.createTarget();
     this.game_started = true;
     this.bals = 0;
-    this.color_bals = '';
   }
   getRand(max: number) {
     return Math.floor(Math.random() * max);
@@ -220,7 +212,6 @@ export class AppComponent {
     this.refreshSnakeColors();
     return;
   }
-  color_bals = '';
   refreshSnakeColors() {
     this.clearField();
     this.colorChange(this.target.x, this.target.y, "red");
@@ -315,7 +306,7 @@ export class AppComponent {
   cell_size = 26;
   setCellSize(n: number) {
     this.cell_size = n - 4;
-    this.raschet();
+    this.changeFieldSize();
     localStorage.setItem("cell_size_s", this.cell_size + "")
   }
   setGameSpeed(n: number) {
@@ -376,7 +367,6 @@ export class AppComponent {
     
     const data = localStorage.getItem("save");
     if (data) {
-      this.color_bals = '';
       let m = data.split(';');
       this.x = Number(m[0]);
       this.y = Number(m[1]);
