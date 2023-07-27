@@ -158,7 +158,7 @@ export class AppComponent {
   }
   createNewSnake() {
     this.napravlenie = this.tmp_napravlenie;
-    console.log(this.game_snake.length, this.napravlenie);
+    // console.log(this.game_snake.length, this.napravlenie);
     switch (this.napravlenie) {
       case 0:
         this.game_snake.unshift({ x: this.game_snake[0].x, y: this.game_snake[0].y - 1 });
@@ -220,12 +220,19 @@ export class AppComponent {
   @HostListener('window:keydown', ['$event'])
   faster(ev: any)
   {
-    // console.log(ev.key);
-    if (ev.key == ' ') {
+    console.log(ev.key.length, ev.key);
+    if (ev.key == ' ' && !this.is_acceleration) {
+      this.is_acceleration = true;
       this.intervalStop();
       // this.intervalGo();
-      this.game_interval = setInterval(() => {this.gameTick()}, this.game_speed-30);
+      this.game_interval = setInterval(() => {this.gameTick()}, (this.game_speed-this.acceleration));
     }
+  }
+  is_acceleration = false;
+  acceleration = 30;
+  setAcceleration(n: number) {
+    this.acceleration = n;
+    localStorage.setItem("acceleration", n+"");
   }
   @HostListener('window:keyup', ['$event'])
   changeNapravlenie(ev: any) {
@@ -255,7 +262,8 @@ export class AppComponent {
         this.napravlenie != 1 ? this.tmp_napravlenie = 3 : 0;
         return;
       case ' ':
-        this.refreshInterval()
+        this.is_acceleration = false;
+        this.refreshInterval();
         return;
     }
   }
@@ -263,6 +271,12 @@ export class AppComponent {
     this.norm_game_speed = 300;
     this.game_speed = 300;
     this.speed_up = 10;
+  }
+  removeLocalStorage() {
+    localStorage.removeItem("game_speed_s");
+    localStorage.removeItem("speed_up_s");
+    localStorage.removeItem("cell_size_s");
+    localStorage.removeItem("acceleration")
   }
   cell_size = 26;
   setCellSize(n: number) {
@@ -294,6 +308,9 @@ export class AppComponent {
     if (localStorage.getItem("dark")) {
       this.dark_theme = localStorage.getItem("dark") == "1" ? true : false;
       this.setTheme();
+    }
+    if (localStorage.getItem("acceleration")) {
+      this.acceleration = Number(localStorage.getItem("acceleration"));
     }
   }
   is_pause = false;

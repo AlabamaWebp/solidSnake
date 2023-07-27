@@ -70,6 +70,11 @@
               <input type="number" [value]="y" style="width: 100px;" 
                 (input)="y = y1.valueAsNumber;changeFieldSize()" #y1>
             </span>
+            <button class="button3" (click)="raschet()">
+              Ускорение
+              <input type="number" [value]="acceleration" style="width: 100px;" 
+                (input)="setAcceleration(acc.valueAsNumber)" #acc>
+            </button>
             <button class="button2" (click)="setTheme(true)">
               Сменить тему
             </button>
