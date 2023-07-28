@@ -165,15 +165,24 @@ export class AppComponent {
   }
   createTarget() {
     let t = this.createRandPos();
+    // for (let i = 0; i < this.game_snake.length; i++) {
+    //   if (this.game_snake[i].x == t.x && this.game_snake[i].y == t.y) {
+    //     t = this.createRandPos();
+    //     i = 0;
+    //   }
+    // }
+    while (this.chaeckNewTarget(t)) {
+      t = this.createRandPos();
+    }
+    this.target = t;
+  }
+  chaeckNewTarget(t: { x: number, y: number }) {
     for (let i = 0; i < this.game_snake.length; i++) {
       if (this.game_snake[i].x == t.x && this.game_snake[i].y == t.y) {
-        t = this.createRandPos();
-        i = 0;
+        return true;
       }
     }
-    this.game_speed -= this.speed_up;
-    this.refreshInterval();
-    this.target = t;
+    return false;
   }
   target: { x: number, y: number } = this.createRandPos();
   game_snake: { x: number, y: number }[] = [];
@@ -206,6 +215,8 @@ export class AppComponent {
     
     if (this.game_snake[0].x == this.target.x && this.game_snake[0].y == this.target.y) {
       this.createTarget();
+      this.game_speed -= this.speed_up;
+      this.refreshInterval();
       ++this.bals;
     }
     else {
