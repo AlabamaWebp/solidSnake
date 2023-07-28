@@ -85,13 +85,13 @@ export class SnakeComponent {
         let tmpX;
         if (!this.landing) {
           tmpE = el.clientWidth > el.clientHeight ? el.clientWidth : el.clientHeight;
-          tmpX =         this.x > this.y ? this.x : this.y;
+          tmpX = this.x > this.y ? this.x : this.y;
         }
         else {
           tmpE = el.clientWidth < el.clientHeight ? el.clientWidth : el.clientHeight;
-          tmpX =         this.x < this.y ? this.x : this.y;
+          tmpX = this.x < this.y ? this.x : this.y;
         }
-        this.setCellSize(Math.floor((tmpE) / (tmpX))-5);
+        this.setCellSize(Math.floor((tmpE) / (tmpX)) - 5);
         this.changeFieldSize();
       }, 10);
     }
@@ -137,7 +137,7 @@ export class SnakeComponent {
     this.intervalGo();
   }
   intervalGo() {
-    this.game_interval = setInterval(() => {this.gameTick()}, this.game_speed);
+    this.game_interval = setInterval(() => { this.gameTick() }, this.game_speed);
   }
   intervalStop() {
     clearInterval(this.game_interval);
@@ -213,7 +213,7 @@ export class SnakeComponent {
         this.game_snake.unshift({ x: this.game_snake[0].x - 1, y: this.game_snake[0].y });
         break;
     }
-    
+
     if (this.game_snake[0].x == this.target.x && this.game_snake[0].y == this.target.y) {
       if (this.game_snake.length >= (this.x * this.y)) {
         this.stopSnake();
@@ -314,7 +314,7 @@ export class SnakeComponent {
       case 'ArrowLeft':
         this.napravlenie != 1 ? this.tmp_napravlenie = 3 : 0;
         return;
-        case 'Enter':
+      case 'Enter':
         if (!this.game_started) {
           this.startSnake();
         }
@@ -398,7 +398,7 @@ export class SnakeComponent {
     document.getElementById('save')?.setAttribute("disabled", "")
   }
   loadSnake() {
-    
+
     const data = localStorage.getItem("save_snake");
     if (data) {
       let m = data.split(';');
@@ -413,7 +413,7 @@ export class SnakeComponent {
           y: Number(tmp_snake[1]),
         });
       }
-      
+
       const tmp_t = m[3].split(',');
       this.target = { x: Number(tmp_t[0]), y: Number(tmp_t[1]) };
       this.bals = Number(m[4]);
@@ -436,23 +436,23 @@ export class SnakeComponent {
   }
   setTheme(toggle = false) {
     toggle ? this.toggleTheme() : 0;
-    if (this.dark_theme){
-      document.documentElement.setAttribute("dark","1");
+    if (this.dark_theme) {
+      document.documentElement.setAttribute("dark", "1");
       localStorage.setItem("dark", '1')
     }
     else {
-      document.documentElement.setAttribute("dark","0");
+      document.documentElement.setAttribute("dark", "0");
       localStorage.setItem("dark", '0')
     }
   }
   setFieldX(n: number) {
     this.x = n;
-    localStorage.setItem("x_snake", this.x+"");
+    localStorage.setItem("x_snake", this.x + "");
     this.changeFieldSize()
   }
   setFieldY(n: number) {
     this.y = n;
-    localStorage.setItem("y_snake", this.y+"");
+    localStorage.setItem("y_snake", this.y + "");
     this.changeFieldSize()
   }
 }
