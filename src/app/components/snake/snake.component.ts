@@ -374,10 +374,10 @@ export class SnakeComponent {
       this.schet_po_size = localStorage.getItem('schet') == '1' ? true : false;
     }
     if (localStorage.getItem('x')) {
-      this.x = Number(localStorage.getItem("x"));
+      this.x = Number(localStorage.getItem("x_snake"));
     }
     if (localStorage.getItem('y')) {
-      this.y = Number(localStorage.getItem("y"));
+      this.y = Number(localStorage.getItem("y_snake"));
     }
   }
   is_pause = false;
@@ -394,12 +394,12 @@ export class SnakeComponent {
     snake = snake.slice(0, snake.length - 1);
     const save = `${this.x};${this.y};${snake};${apple};${this.bals};${this.game_speed};${this.napravlenie}`;
     // ;${this.acceleration}
-    localStorage.setItem("save", save);
+    localStorage.setItem("save_snake", save);
     document.getElementById('save')?.setAttribute("disabled", "")
   }
   loadSnake() {
     
-    const data = localStorage.getItem("save");
+    const data = localStorage.getItem("save_snake");
     if (data) {
       let m = data.split(';');
       this.x = Number(m[0]);
@@ -447,12 +447,12 @@ export class SnakeComponent {
   }
   setFieldX(n: number) {
     this.x = n;
-    localStorage.setItem("x", this.x+"");
+    localStorage.setItem("x_snake", this.x+"");
     this.changeFieldSize()
   }
   setFieldY(n: number) {
     this.y = n;
-    localStorage.setItem("y", this.y+"");
+    localStorage.setItem("y_snake", this.y+"");
     this.changeFieldSize()
   }
 }

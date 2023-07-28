@@ -42,6 +42,7 @@ body {
     user-select: none;
     height: 40px;
     color: $violet;
+    background-color: white;
     border: 1px solid $violet !important;
     cursor: pointer;
     border-radius: 5px;
@@ -162,4 +163,9 @@ body {
         position: relative;
         top: 10px;
     }
+}
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

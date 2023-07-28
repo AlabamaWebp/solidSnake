@@ -1,1 +1,95 @@
-<p>saper works!</p>
+<div class="wg">
+    <div class="wgc">
+        <div class="wgcc">
+            <div class="top_line flex">
+                <div class="r">
+                    <button class="button1 hover_show" style="padding: 2px 5px; height: 33px !important;"
+                        [disabled]="game_started" [style.pointerEvents]="game_started ? 'none' : 'all'">
+                        Настройки
+                    </button>
+                    <div class="settings">
+                        <div class="button3" (click)="return_settings()" style="width: 200px;">
+                            по умолчанию
+                        </div>
+
+                        <span>
+                            Размер ячейки поля:
+                            <input type="number" [value]="cell_size+4" style="width: 100px;"
+                                (change)="setCellSize(cs.valueAsNumber)" #cs>
+                        </span>
+                        <span>
+                            Количество бомб:
+                            <input type="number" [value]="bombs" style="width: 100px;"
+                                (change)="setBombs(bmb.valueAsNumber)" #bmb>
+                        </span>
+                        <span>fieldX:
+                            <input type="number" [value]="x" style="width: 100px;"
+                                (input)="setFieldX(x1.valueAsNumber);" #x1 [disabled]="game_started">
+                        </span>
+                        <span>fieldY:
+                            <input type="number" [value]="y" style="width: 100px;"
+                                (input)="setFieldY(y1.valueAsNumber);" #y1 [disabled]="game_started">
+                        </span>
+                        <span>
+                            Количество бомб в процентах (от всей карты):
+                            <input type="number" [value]="bomb_del" style="width: 100px;"
+                                (change)="setBombDel(bmb1.valueAsNumber)" #bmb1 max="100" min="1">
+                        </span>
+                        <button class="button3" (click)="bombRaschet()" [disabled]="game_started">
+                            Расчитать бомбы
+                        </button>
+                        <button class="button3" (click)="raschet()" [disabled]="game_started">
+                            рассчитать
+                        </button>
+                        <a routerLink="/snake" class="button2">
+                            Змейка
+                        </a>
+                    </div>
+                </div>
+                <div class="c">
+                    <span>помечено: {{bals}} all:{{bombs}}</span>
+                    <span>{{endgame_text}}</span>
+                    <!-- <span>cur: {{bals}}</span>
+            <span> max: {{max_bals}}</span> -->
+                </div>
+                <div class="l flex">
+                    <button class="button3" (click)="start();" *ngIf="!game_started">
+                        Начать
+                    </button>
+                    <button class="button3" (click)="stop()" *ngIf="game_started">
+                        Конец
+                    </button>
+                    <button class="button3" 
+                    (click)="save()"
+                     id="save" *ngIf="game_started">
+                     <!-- *ngIf="is_pause" -->
+                      Сохранить
+                    </button>
+                    <button class="button2" 
+                    (click)="load()" [disabled]="!load_lc">
+                    <!-- *ngIf="!game_started || is_pause" -->
+                      Загрузить
+                    </button>
+                    <!-- <button class="button2"
+            *ngFor="let page of pages">
+              {{page}}
+            </button> -->
+                </div>
+            </div>
+            <div class="game_container" id="game_container">
+                <table>
+                    <tr *ngFor="let row of field">
+                        <td *ngFor="let col of row.cols" class="td hidden1 y{{row.rowId}}! x{{col.colId}}"
+                            id="y{{row.rowId}}! x{{col.colId}}" [class.clickable]="game_started"
+                            [style.width]="cell_size + 'px !important'" [style.height]="cell_size + 'px !important'"
+                            (click)="clickCell({x: col.colId, y: row.rowId})" #td (auxclick)="auxClick(td, {x: col.colId, y: row.rowId})">
+                            <!-- [class.bomb]="checkBomb(col.colId, row.rowId)" -->
+                            <!-- [style.backgroundColor]="col.fill"  -->
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
