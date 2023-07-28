@@ -230,6 +230,7 @@ export class SaperComponent {
       ref.classList.add("clicked");
       ref.classList.remove('hidden1');
       this.open_cells.push({ x: data.x, y: data.y })
+      document.getElementById('save')?.removeAttribute("disabled");
       if (n == 0) {
         this.clickCell({ x: data.x + 1, y: data.y });
         this.clickCell({ x: data.x - 1, y: data.y });
@@ -360,6 +361,10 @@ export class SaperComponent {
     this.load_lc = true;
   }
   load() {
+    this.bombs_coord = []
+    this.metki = [];
+    this.open_cells = [];
+    this.bals = 0;
     this.stop();
     const data = localStorage.getItem("save_saper");
     if (data) {
