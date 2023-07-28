@@ -1,1 +1,4 @@
-<router-outlet></router-outlet>
+<!-- <router-outlet></router-outlet> -->
+<app-home (page)="page = $event" *ngIf="page == 0"></app-home>
+<app-snake (page)="page = $event" *ngIf="page == 1"></app-snake>
+<app-saper (page)="page = $event" *ngIf="page == 2"></app-saper>

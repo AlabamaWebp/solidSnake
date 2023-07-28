@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, EventEmitter, HostListener, Output } from '@angular/core';
 
 @Component({
   selector: 'app-snake',
@@ -7,6 +7,11 @@ import { Component, HostListener } from '@angular/core';
 })
 export class SnakeComponent {
   constructor() { }
+
+  @Output() page = new EventEmitter();
+  goToSaper() {
+    this.page.emit(2);
+  }
 
   ngOnInit(): void {
     this.setWindowSize();

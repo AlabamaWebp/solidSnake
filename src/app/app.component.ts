@@ -12,7 +12,9 @@ export class AppComponent {
       this.setTheme();
     }
   }
+
   dark_theme = true;
+
   toggleTheme() {
     this.dark_theme = !this.dark_theme;
   }
@@ -27,4 +29,7 @@ export class AppComponent {
       localStorage.setItem("dark", '0')
     }
   }
+
+  
+  page = 0;
 }

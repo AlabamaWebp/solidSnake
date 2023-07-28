@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, EventEmitter, HostListener, Output } from '@angular/core';
 
 @Component({
   selector: 'app-saper',
@@ -7,6 +7,11 @@ import { Component, HostListener } from '@angular/core';
 })
 export class SaperComponent {
   constructor() { }
+
+  @Output() page = new EventEmitter();
+  goToSnake() {
+    this.page.emit(1);
+  }
 
   ngOnInit(): void {
     this.initLocalStorage();
