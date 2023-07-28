@@ -11,6 +11,9 @@ export class AppComponent {
       this.dark_theme = localStorage.getItem("dark") == "1" ? true : false;
       this.setTheme();
     }
+    if (localStorage.getItem("page")) {
+      this.page = Number(localStorage.getItem("page"));
+    }
   }
 
   dark_theme = true;
@@ -30,6 +33,10 @@ export class AppComponent {
     }
   }
 
-  
+
   page = 0;
+  setPage(n: number) {
+    this.page = n;
+    localStorage.setItem("page", n+'');
+  }
 }
