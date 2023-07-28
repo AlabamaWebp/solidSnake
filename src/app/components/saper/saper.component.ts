@@ -133,7 +133,7 @@ export class SaperComponent {
     // НЕНАДЁЖНО!!!!!!!!!!
     // const ref = document.getElementsByClassName("x" + data.x + " y" + data.y + "!")[0];
     const ref = document.getElementById("y" + data.y + "! " + "x" + data.x) as HTMLElement;
-    if (this.game_started && !ref.className.includes("clicked")) {
+    if (this.game_started && !ref.className.includes("clicked") && !ref.className.includes("metka")) {
 
       for (let i = 0; i < this.bombs_coord.length; i++) {
         if (this.bombs_coord[i].x == data.x && this.bombs_coord[i].y == data.y) {
