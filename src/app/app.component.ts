@@ -146,8 +146,8 @@ export class AppComponent {
     this.clearField();
     this.norm_game_speed = this.game_speed;
     const coord = this.getCenter();
-    this.colorChange(coord[0].x, coord[0].y, "rgb(0, 90, 0)");
-    this.colorChange(coord[1].x, coord[1].y, "green");
+    this.colorChange(coord[0].x, coord[0].y, "green");
+    this.colorChange(coord[1].x, coord[1].y, "rgb(0, 90, 0)");
     this.game_snake = coord;
     this.intervalGo();
     this.createTarget();
@@ -175,6 +175,7 @@ export class AppComponent {
       t = this.createRandPos();
     }
     this.target = t;
+    this.colorChange(this.target.x, this.target.y, "red");
   }
   chaeckNewTarget(t: { x: number, y: number }) {
     for (let i = 0; i < this.game_snake.length; i++) {
@@ -214,10 +215,16 @@ export class AppComponent {
     }
     
     if (this.game_snake[0].x == this.target.x && this.game_snake[0].y == this.target.y) {
-      this.createTarget();
-      this.game_speed -= this.speed_up;
-      this.refreshInterval();
-      ++this.bals;
+      if (this.game_snake.length >= (this.x * this.y)) {
+        this.stopSnake();
+        alert('Победа!!!!!!!!!!!!!');
+      }
+      else {
+        this.createTarget();
+        this.game_speed -= this.speed_up;
+        this.refreshInterval();
+        ++this.bals;
+      }
     }
     else {
       this.game_snake.pop();
