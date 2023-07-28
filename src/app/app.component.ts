@@ -25,7 +25,9 @@ export class AppComponent {
     else {
       this.landing = false;
     }
+    x > y ? this.tmpxy = x : this.tmpxy = y;
   }
+  tmpxy = 0;
   landing = false;
   // wx = 0;
   // wy = 0;
@@ -71,12 +73,25 @@ export class AppComponent {
       }, 10);
     }
     else {
-      this.cell_size = 14;
+      let x = this.x;
+      let y = this.y;
+      this.x = 1;
+      this.y = 1;
       this.changeFieldSize();
+      this.x = x;
+      this.y = y;
       setTimeout(() => {
-        let tmpE = el.clientWidth < el.clientHeight ? el.clientWidth : el.clientHeight;
-        let tmpX = this.x < this.y ? this.x : this.y;
-        this.setCellSize(Math.floor((tmpE) / (tmpX)) - 5);
+        let tmpE;
+        let tmpX;
+        if (!this.landing) {
+          tmpE = el.clientWidth > el.clientHeight ? el.clientWidth : el.clientHeight;
+          tmpX =         this.x > this.y ? this.x : this.y;
+        }
+        else {
+          tmpE = el.clientWidth < el.clientHeight ? el.clientWidth : el.clientHeight;
+          tmpX =         this.x < this.y ? this.x : this.y;
+        }
+        this.setCellSize(Math.floor((tmpE) / (tmpX))-5);
         this.changeFieldSize();
       }, 10);
     }
@@ -230,30 +245,30 @@ export class AppComponent {
   }
   tmp_napravlenie = this.napravlenie;
 
-  clickKrug() {
-    if (this.is_acceleration) {
-      this.changeNapravlenie({key: ' '});
-    }
-    else {
-      this.faster({key: ' '});
-    }
-  }
-  @HostListener('window:keydown', ['$event'])
-  faster(ev: any)
-  {
-    if (ev.key == ' ' && !this.is_acceleration) {
-      this.is_acceleration = true;
-      this.intervalStop();
-      // this.intervalGo();
-      this.game_interval = setInterval(() => {this.gameTick()}, (this.game_speed-this.acceleration));
-    }
-  }
-  is_acceleration = false;
-  acceleration = 30;
-  setAcceleration(n: number) {
-    this.acceleration = n;
-    localStorage.setItem("acceleration", n+"");
-  }
+  // clickKrug() {
+  //   if (this.is_acceleration) {
+  //     this.changeNapravlenie({key: ' '});
+  //   }
+  //   else {
+  //     this.faster({key: ' '});
+  //   }
+  // }
+  // @HostListener('window:keydown', ['$event'])
+  // faster(ev: any)
+  // {
+  //   if (ev.key == ' ' && !this.is_acceleration) {
+  //     this.is_acceleration = true;
+  //     this.intervalStop();
+  //     // this.intervalGo();
+  //     this.game_interval = setInterval(() => {this.gameTick()}, (this.game_speed-this.acceleration));
+  //   }
+  // }
+  // is_acceleration = false;
+  // acceleration = 30;
+  // setAcceleration(n: number) {
+  //   this.acceleration = n;
+  //   localStorage.setItem("acceleration", n+"");
+  // }
   @HostListener('window:keyup', ['$event'])
   changeNapravlenie(ev: any) {
     switch (ev.key) {
@@ -286,10 +301,10 @@ export class AppComponent {
           this.startSnake();
         }
         return;
-      case ' ':
-        this.is_acceleration = false;
-        this.refreshInterval();
-        return;
+      // case ' ':
+      //   this.is_acceleration = false;
+      //   this.refreshInterval();
+      //   return;
     }
   }
   return_settings() {
@@ -334,9 +349,9 @@ export class AppComponent {
       this.dark_theme = localStorage.getItem("dark") == "1" ? true : false;
       this.setTheme();
     }
-    if (localStorage.getItem("acceleration")) {
-      this.acceleration = Number(localStorage.getItem("acceleration"));
-    }
+    // if (localStorage.getItem("acceleration")) {
+    //   this.acceleration = Number(localStorage.getItem("acceleration"));
+    // }
     if (localStorage.getItem('schet')) {
       this.schet_po_size = localStorage.getItem('schet') == '1' ? true : false;
     }
@@ -359,7 +374,8 @@ export class AppComponent {
       snake += `${this.game_snake[i].x},${this.game_snake[i].y}/`;
     }
     snake = snake.slice(0, snake.length - 1);
-    const save = `${this.x};${this.y};${snake};${apple};${this.bals};${this.game_speed};${this.napravlenie};${this.acceleration}`;
+    const save = `${this.x};${this.y};${snake};${apple};${this.bals};${this.game_speed};${this.napravlenie}`;
+    // ;${this.acceleration}
     localStorage.setItem("save", save);
     document.getElementById('save')?.setAttribute("disabled", "")
   }
@@ -385,7 +401,7 @@ export class AppComponent {
       this.bals = Number(m[4]);
       this.game_speed = Number(m[5]);
       this.napravlenie = Number(m[6]); this.tmp_napravlenie = Number(m[6]);
-      this.acceleration = Number(m[7]);
+      // this.acceleration = Number(m[7]);
     }
     this.game_started = true;
     this.is_pause = true;

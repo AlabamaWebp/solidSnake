@@ -70,11 +70,11 @@
               <input type="number" [value]="y" style="width: 100px;" 
                 (input)="setFieldY(y1.valueAsNumber);" #y1>
             </span>
-            <span>
+            <!-- <span>
               Ускорение
               <input type="number" [value]="acceleration" style="width: 100px;" 
                 (change)="setAcceleration(acc.valueAsNumber)" #acc>
-            </span>
+            </span> -->
             <button class="{{schet_po_size ? 'button3' : 'button2'}}" 
             (click)="setSchet()">
               {{schet_po_size ? 'Рассчывать размер поля' : 'Рассчывать размер ячейки'}}
@@ -88,8 +88,13 @@
           </div>
         </div>
       </div>
-      <div class="game_wrapper" [style.flexDirection]="landing ? '' : 'column'">
-        <div class="game_container" id="game_container">
+      <div class="game_wrapper" 
+      [style.flexDirection]="landing ? '' : 'column'"
+      >
+      <!-- [style.alignItems]="landing ? '' : 'center'" -->
+        <div class="game_container" id="game_container"
+        [style.height]="!landing ? 'auto' : '100%'"
+        >
           <table>
             <tr *ngFor="let row of field">
               <td *ngFor="let col of row.cols"
@@ -103,7 +108,15 @@
             </tr>
           </table>
         </div>
-        <table class="gamepad">
+        <div class="ac gamepad" *ngIf="!landing">
+          <div class="al a" (click)="changeNapravlenie({key: 'a'})"><span><</span></div>
+          <div class="acentr">
+            <div class="at a" (click)="changeNapravlenie({key: 'w'})"><span>></span></div>
+            <div class="ab a" (click)="changeNapravlenie({key: 's'})"><span>></span></div>
+          </div>
+          <div class="ar a" (click)="changeNapravlenie({key: 'd'})"><span>></span></div>
+        </div>
+        <table class="gamepad" *ngIf="landing" id="gamepad" [style.height]="gamepad.clientWidth+'px'" #gamepad>
           <tr class="row">
             <td class=""></td>
             <td class="col ggreen" (click)="changeNapravlenie({key: 'w'})"><div style="transform: rotate(-90deg);">></div></td>
@@ -111,7 +124,8 @@
           </tr>
           <tr class="row">
             <td class="col ggreen" (click)="changeNapravlenie({key: 'a'})"><div><</div></td>
-            <td class="col gred" (click)="clickKrug()" ><div>o</div></td>
+            <td class="col gred" ><div>x</div></td>
+            <!-- (click)="clickKrug()" -->
             <td class="col ggreen" (click)="changeNapravlenie({key: 'd'})"><div>></div></td>
           </tr>
           <tr class="row">
