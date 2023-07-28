@@ -1,0 +1,26 @@
+.wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+
+    .button_wrapper {
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        .button3, .button2 {
+            font-size: 50px;
+            margin: 10px;
+            padding: 10px 20px;
+            text-decoration: none;
+            height: 40%;
+            width: 90%;
+        }
+        .button2 {
+            background-color: #cfcfcf;
+            border-width: 3px !important;
+        }
+    }
+}
