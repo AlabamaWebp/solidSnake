@@ -227,6 +227,11 @@ export class SaperComponent {
   }
   bombs_coord: xy[] = [];
   start() {
+    this.bombs_coord = []
+    this.metki = [];
+    this.open_cells = [];
+    this.bals = 0;
+
     this.endgame_text = '';
     this.changeFieldSize();
     for (let i = 0; i < this.bombs; i++) {
@@ -249,16 +254,7 @@ export class SaperComponent {
   }
 
   stop() {
-    this.bombs_coord = []
     this.game_started = false;
-    this.metki = [];
-    this.open_cells = [];
-    this.bals = 0;
-    // if (this.max_bals < this.bals) {
-    //   this.max_bals = this.bals;
-    //   localStorage.setItem("sapr_max", this.max_bals+"");
-    // }
-    // this.bals = 0;
   }
   bomb_del = 40;
   setBombDel(n: number) {
@@ -280,6 +276,22 @@ export class SaperComponent {
       this.bals--;
     }
   }
+  auxTouch(ref: HTMLElement, data: { x: number, y: number }) {
+    if (!this.is_aux) {
+      ref.classList.toggle('metka');
+      if (ref.className.includes("metka")) {
+        this.metki.push(data);
+        this.bals++;
+      }
+      else {
+        this.metki.splice(this.metki.findIndex(m => m.x == data.x && m.y == data.y), 1);
+        this.bals--;
+      }
+      this.is_aux = true;
+    }
+  }
+  is_aux = false;
+
   metki: { x: number, y: number }[] = [];
   @HostListener('window:keyup', ["$event"])
   keeylistner(ev: KeyboardEvent) {

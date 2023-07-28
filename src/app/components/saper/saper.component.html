@@ -47,8 +47,9 @@
                     </div>
                 </div>
                 <div class="c">
-                    <span>помечено: {{bals}} all:{{bombs}}</span>
-                    <span>{{endgame_text}}</span>
+                    <span>cur: {{bals}}</span>
+                    <span>all:{{bombs}}</span>
+                    <!-- <span>{{endgame_text}}</span> -->
                     <!-- <span>cur: {{bals}}</span>
             <span> max: {{max_bals}}</span> -->
                 </div>
@@ -66,7 +67,9 @@
                       Сохранить
                     </button>
                     <button class="button2" 
-                    (click)="load()" [disabled]="!load_lc">
+                    (click)="load()" 
+                    [disabled]="!load_lc"
+                    *ngIf="!game_started">
                     <!-- *ngIf="!game_started || is_pause" -->
                       Загрузить
                     </button>
@@ -76,13 +79,18 @@
             </button> -->
                 </div>
             </div>
+            <!-- <div (d)=""></div> -->
             <div class="game_container" id="game_container">
                 <table>
                     <tr *ngFor="let row of field">
                         <td *ngFor="let col of row.cols" class="td hidden1 y{{row.rowId}}! x{{col.colId}}"
                             id="y{{row.rowId}}! x{{col.colId}}" [class.clickable]="game_started"
                             [style.width]="cell_size + 'px !important'" [style.height]="cell_size + 'px !important'"
-                            (click)="clickCell({x: col.colId, y: row.rowId})" #td (auxclick)="auxClick(td, {x: col.colId, y: row.rowId})">
+                            (click)="clickCell({x: col.colId, y: row.rowId})" #td 
+                            (auxclick)="auxClick(td, {x: col.colId, y: row.rowId})"
+                            (touchmove)="auxTouch(td, {x: col.colId, y: row.rowId});"
+                            (touchend)="is_aux ? is_aux = false : clickCell({x: col.colId, y: row.rowId})"
+                            >
                             <!-- [class.bomb]="checkBomb(col.colId, row.rowId)" -->
                             <!-- [style.backgroundColor]="col.fill"  -->
 
