@@ -310,7 +310,7 @@ export class SaperComponent {
     }
   }
   auxTouch(ref: HTMLElement, data: { x: number, y: number }) {
-    if (!this.is_aux) {
+    if (!this.is_aux && !ref.className.includes('clicked') && this.game_started) {
       ref.classList.toggle('metka');
       if (ref.className.includes("metka")) {
         this.metki.push(data);
