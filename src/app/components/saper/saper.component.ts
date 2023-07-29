@@ -299,14 +299,16 @@ export class SaperComponent {
     this.bombs = Math.floor((this.x * this.y) * (this.bomb_del / 100));
   }
   auxClick(ref: HTMLElement, data: { x: number, y: number }) {
-    ref.classList.toggle('metka');
-    if (ref.className.includes("metka")) {
-      this.metki.push(data);
-      this.bals++;
-    }
-    else {
-      this.metki.splice(this.metki.findIndex(m => m.x == data.x && m.y == data.y), 1);
-      this.bals--;
+    if (!ref.className.includes('clicked') && this.game_started) {
+      ref.classList.toggle('metka');
+      if (ref.className.includes("metka")) {
+        this.metki.push(data);
+        this.bals++;
+      }
+      else {
+        this.metki.splice(this.metki.findIndex(m => m.x == data.x && m.y == data.y), 1);
+        this.bals--;
+      }
     }
   }
   auxTouch(ref: HTMLElement, data: { x: number, y: number }) {
